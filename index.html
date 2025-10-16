@@ -3,252 +3,414 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Afrah’s Special Massage for Aiman 💕</title>
+<title>Afrah × Kuromi — Massage for Aiman</title>
 <style>
   :root{
-    --bg:#fff0f6;
-    --card:#ffe4ec;
-    --text:#4a1e2c;
-    --accent:#ff69b4;
-    --accent2:#ffb3c6;
-    --muted:#a05370;
-    --ok:#4cc9f0;
-    --danger:#e63946;
+    --bg0:#07070c;           /* deep black-blue */
+    --bg1:#0f0b1b;           /* dark purple */
+    --bg2:#0a1230;           /* dark blue */
+    --card:#12152a;
+    --text:#e9e7ff;
+    --muted:#9aa0c6;
+    --accent:#a26bff;        /* purple */
+    --accent2:#5ab0ff;       /* blue */
+    --glow:#3bffb0;          /* neon green */
+    --danger:#ff5c8a;        /* pinkish red */
+    --ok:#4df3ff;            /* aqua */
+    --round:18px;
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
   body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:linear-gradient(180deg,#fff0f6 0%,#ffd6e8 100%);
-    color:var(--text);
+    margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    color:var(--text); background: radial-gradient(1200px 800px at 20% -10%, #1a1240 0%, transparent 60%),
+                         radial-gradient(1000px 700px at 120% 20%, #0a1a50 0%, transparent 60%),
+                         linear-gradient(180deg, var(--bg1), var(--bg2) 50%, var(--bg0));
+    overflow-x:hidden;
   }
-  .wrap{max-width:800px;margin:auto;padding:20px;display:grid;gap:18px;}
-  header{text-align:center;}
-  h1{margin:0;font-size:26px;color:var(--accent);}
-  .sub{font-size:14px;color:var(--muted);}
+
+  /* Subtle starfield */
+  .stars, .stars2, .stars3{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-repeat:repeat;
+    background-image: radial-gradient(2px 2px at 20px 30px, #fff8, transparent 40%),
+                      radial-gradient(1.5px 1.5px at 120px 80px, #bff8, transparent 40%),
+                      radial-gradient(1.5px 1.5px at 260px 140px, #fff6, transparent 40%),
+                      radial-gradient(2px 2px at 320px 220px, #cff8, transparent 40%);
+    animation: twinkle 10s linear infinite;
+    opacity:.35;
+  }
+  .stars2{ animation-duration:14s; opacity:.25; filter:hue-rotate(40deg) }
+  .stars3{ animation-duration:18s; opacity:.20; filter:hue-rotate(-30deg) }
+  @keyframes twinkle{ 0%{transform:translateY(0)} 100%{transform:translateY(-40px)} }
+
+  .wrap{position:relative; z-index:1; max-width:900px; margin:auto; padding:18px; display:grid; gap:14px}
+  header{
+    background: linear-gradient(180deg, #1a1440aa, #0c1130aa);
+    border:1px solid #2a2f6a; border-radius:var(--round); padding:14px 16px;
+    box-shadow:0 10px 24px #0007, 0 0 40px #7c3cff22;
+  }
+  h1{margin:0; font-size:22px}
+  .subtitle{color:var(--muted); font-size:13px}
+
+  .grid{display:grid; gap:12px}
+  @media(min-width:760px){ .grid{grid-template-columns: 1.2fr 1fr} }
+
   .card{
-    background:var(--card);
-    border:2px solid var(--accent2);
-    border-radius:18px;
-    padding:16px;
-    box-shadow:0 6px 14px rgba(255,105,180,0.25);
+    background: linear-gradient(180deg, #0f1535cc, #0b102bcc);
+    border:1px solid #263070; border-radius:var(--round); padding:14px;
+    box-shadow:0 14px 30px #000a, inset 0 0 0 1px #0008;
   }
-  .packages{display:grid;gap:12px;}
+
+  /* Kuromi skull icon container (tap target) */
+  .kuromi-icon{
+    position:absolute; right:14px; top:14px; width:38px; height:38px; cursor:pointer;
+    filter: drop-shadow(0 0 8px #000) drop-shadow(0 0 18px #7c3cff60);
+    display:grid; place-items:center;
+  }
+  .kuromi-icon:active{ transform:scale(0.96) }
+
+  /* inline SVG size */
+  .kuromi-icon svg{ width:34px; height:34px }
+
+  /* Buttons & inputs */
+  .btn{padding:10px 14px; border-radius:12px; border:1px solid #2a3470; background:#141d4a; color:var(--text); cursor:pointer}
+  .btn.primary{background:linear-gradient(180deg, #3a2bb8, #2a3ea3); border-color:#2e47b8; box-shadow:0 0 24px #3bffb022}
+  .btn.danger{background:#2a1020; border-color:#5e1536; color:#ffd5de}
+  .btn.ok{background:#0f2f2a; border-color:#164a41; color:#cafff2}
+  input, select{
+    width:100%; padding:12px; border-radius:12px; border:1px solid #28326a;
+    background:#0e163b; color:var(--text)
+  }
+  label{font-size:12px; color:var(--muted)}
+
+  /* Packages */
+  .packages{display:grid; gap:10px}
   .pkg{
-    background:white;
-    border:2px solid var(--accent2);
-    border-radius:14px;
-    padding:12px;
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:12px; border-radius:14px; background:#0c1334; border:1px solid #263070;
   }
-  .pkg.active{border-color:var(--accent);}
-  .pkg h3{margin:0;font-size:17px;color:var(--accent);}
-  .tiny{font-size:12px;color:var(--muted);}
-  .btn{
-    border:none;
-    border-radius:12px;
-    padding:10px 14px;
-    font-weight:600;
-    color:white;
-    background:var(--accent);
-    cursor:pointer;
-    transition:.2s;
-  }
-  .btn:hover{filter:brightness(1.05);}
-  .btn.danger{background:var(--danger);}
-  .btn.ok{background:var(--ok);color:#002;}
-  label{font-size:13px;color:var(--muted);}
-  input,select{
-    width:100%;
-    padding:10px;
-    border-radius:10px;
-    border:1px solid var(--accent2);
-    background:white;
-    color:var(--text);
-  }
+  .pkg.active{outline:2px solid var(--accent); box-shadow:0 0 24px #a26bff36}
+  .pkg h3{margin:0; font-size:16px; color:#cfc5ff}
+  .tiny{font-size:12px; color:var(--muted)}
+
+  /* Countdown */
   .countdown{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:56px;
-    font-weight:600;
-    color:var(--accent);
-    background:white;
-    border-radius:18px;
-    padding:22px;
-    box-shadow:inset 0 0 12px rgba(255,105,180,0.2);
+    display:flex; justify-content:center; align-items:center;
+    font-variant-numeric:tabular-nums; font-size:56px; letter-spacing:1px;
+    background:#0b1230; border:1px solid #273070; border-radius:18px; padding:20px;
+    box-shadow:0 0 30px #3bffb022, inset 0 0 40px #0008;
+    position:relative;
   }
-  .pill{
-    display:inline-block;
-    padding:5px 10px;
-    background:var(--accent2);
-    border-radius:999px;
-    font-size:12px;
-    color:#fff;
+  .neon-edge{ position:absolute; inset:-2px; border-radius:20px; pointer-events:none;
+    box-shadow:0 0 18px #a26bff55, 0 0 30px #5ab0ff44, 0 0 50px #3bffb040; }
+
+  .chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+  .pill{ display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px;
+         background:#101a46; border:1px solid #2a3470; color:#cfe1ff }
+
+  .row{display:flex; gap:8px; flex-wrap:wrap}
+  .grow{flex:1}
+
+  /* Popup Easter Egg */
+  .popup{
+    position:fixed; left:50%; top:18%; transform:translate(-50%,-30%) scale(0.96);
+    background:#130f2a; border:1px solid #3a2f8a; border-radius:16px; padding:14px 16px;
+    box-shadow:0 20px 40px #000c, 0 0 50px #a26bff40;
+    min-width:260px; max-width:90vw; text-align:center; z-index:5; opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
   }
-  .muted{color:var(--muted);}
-  .flex{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .popup.show{ opacity:1; transform:translate(-50%,-30%) scale(1); pointer-events:auto }
+  .popup .title{ font-weight:700; color:#cdb8ff; margin-bottom:6px }
+  .popup .msg{ color:#cfe9ff; font-size:14px }
+  .wink{ display:inline-block; margin-left:6px; transform-origin:center; animation:wink 1.6s ease infinite }
+  @keyframes wink{ 0%,90%{transform:rotate(0)} 95%{transform:rotate(-25deg)} 100%{transform:rotate(0)} }
+
+  /* SIXXX sevenn banner (visible for a few seconds, slow pulse) */
+  .six-banner{
+    position:fixed; bottom:10px; left:50%; transform:translateX(-50%);
+    background:#0d1536; border:1px solid #2a3470; border-radius:999px; padding:6px 12px;
+    color:#cfe1ff; font-size:12px; letter-spacing:0.5px; z-index:4;
+    animation:pulse 1.8s ease-in-out infinite, slideup .35s ease-out;
+  }
+  @keyframes pulse{ 0%,100%{box-shadow:0 0 0px #3bffb020} 50%{box-shadow:0 0 24px #3bffb04a} }
+  @keyframes slideup{ from{ transform:translate(-50%, 10px); opacity:0 } to{ transform:translate(-50%,0); opacity:1 } }
+  .six-banner.hide{ animation:none; opacity:0; transition:opacity .6s ease }
+
+  .hint{ color:#8fb3ff; font-size:12px }
+
+  /* A tiny divider glow */
+  .hr{ height:1px; border:0; background:linear-gradient(90deg, transparent, #2a3470, transparent); margin:8px 0 }
 </style>
 </head>
 <body>
+  <div class="stars"></div><div class="stars2"></div><div class="stars3"></div>
+
   <div class="wrap">
     <header>
-      <h1>💖 Afrah’s Massage Timer 💖</h1>
-      <div class="sub">This is for Afrah to give her dearest brother Aiman a relaxing massage! 💆‍♂️</div>
-    </header>
+      <div style="position:relative">
+        <h1>💜 For Afrah to massage Aiman — Kuromi edition 😈</h1>
+        <div class="subtitle">Quiet but deadly, just like Kuromi. Pick a package → set time (min 4) → enter password → start.</div>
 
-    <section class="card">
-      <h2 style="margin-top:0;">🌸 Choose the Massage Type 🌸</h2>
-      <div class="packages" id="packages"></div>
-      <div class="muted">Afrah can pick a package she feels Aiman needs today!</div>
-    </section>
-
-    <section class="card">
-      <h2 style="margin-top:0;">💗 Session Setup for Afrah 💗</h2>
-      <div class="controls">
-        <label for="duration">Duration (at least 4 mins, Afrah!)</label>
-        <select id="duration"></select>
-
-        <label for="pwd">Password (Hint: your Roblox password 😉)</label>
-        <input id="pwd" type="password" placeholder="Enter secret password">
-
-        <div class="flex">
-          <button class="btn" id="startBtn">Start Massage Timer</button>
-          <button class="btn danger" id="cancelBtn" disabled>Cancel</button>
+        <!-- Fan-style Kuromi skull icon (tap target) -->
+        <div class="kuromi-icon" id="kuromiIcon" aria-label="Kuromi icon (easter egg)">
+          <!-- Simple fan-style skull + bow SVG (safe, not official art) -->
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <!-- bow -->
+            <path d="M18 10c6 2 10 8 14 8s8-6 14-8c-2 6-8 12-14 12S20 16 18 10z" fill="#a26bff"/>
+            <!-- ears -->
+            <path d="M10 22 L2 6 L14 12 Z" fill="#2a2d52"/>
+            <path d="M54 22 L62 6 L50 12 Z" fill="#2a2d52"/>
+            <!-- skull -->
+            <circle cx="32" cy="36" r="16" fill="#1a1f3f" stroke="#5ab0ff" stroke-width="1.2"/>
+            <!-- eyes -->
+            <ellipse cx="26" cy="36" rx="4" ry="5" fill="#cfe1ff"/>
+            <ellipse cx="38" cy="36" rx="4" ry="5" fill="#cfe1ff"/>
+            <!-- nose -->
+            <circle cx="32" cy="42" r="2" fill="#3bffb0"/>
+            <!-- wink line (overlay animated) -->
+            <line x1="38" y1="36" x2="42" y2="36" stroke="#cfe1ff" stroke-width="2" class="wink"/>
+          </svg>
         </div>
       </div>
-    </section>
+    </header>
 
+    <div class="grid">
+      <!-- Packages -->
+      <section class="card">
+        <h2 style="margin:0 0 6px 0;">Packages for Afrah</h2>
+        <div class="packages" id="packages"></div>
+        <div class="tiny">Times vary by package; timer won’t start below <span style="color:var(--glow)">4 min</span>.</div>
+      </section>
+
+      <!-- Controls -->
+      <section class="card">
+        <h2 style="margin:0 0 6px 0;">Session Setup</h2>
+        <div class="row">
+          <div class="grow">
+            <label for="duration">Duration</label>
+            <select id="duration"></select>
+          </div>
+        </div>
+        <div style="margin-top:8px">
+          <label for="pwd">Password <span class="hint">(hint: your Roblox password)</span></label>
+          <input id="pwd" type="password" placeholder="Enter password (afrahpapa)">
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary grow" id="startBtn">Start for Aiman</button>
+          <button class="btn danger" id="cancelBtn" disabled>Cancel</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Timer -->
     <section class="card">
-      <div class="flex">
-        <span class="pill" id="activePkg">No package yet</span>
+      <div class="chips" style="margin-bottom:8px">
+        <span class="pill" id="activePkg">No package</span>
         <span class="pill" id="activeDur">0:00</span>
       </div>
-      <div class="countdown" id="display">00:00</div>
-      <div class="muted" id="statusLine">Afrah, pick a massage type for Aiman!</div>
-      <div class="flex">
+      <div class="countdown" id="display" aria-label="Timer (tap 6× for secret)">
+        <div class="neon-edge"></div>
+        <span id="timeText">00:00</span>
+      </div>
+      <div class="row" style="margin-top:10px; justify-content:center">
         <button class="btn" id="pauseBtn" disabled>Pause</button>
         <button class="btn ok" id="resumeBtn" disabled>Resume</button>
       </div>
+      <hr class="hr" />
+      <div class="tiny" id="statusLine">Afrah, pick a vibe for Aiman: soft, shoulder, head/neck, or deluxe 💅</div>
     </section>
-
-    <footer style="text-align:center;color:var(--muted);font-size:12px;">
-      Made with 💖 by Aiman for his favorite sister Afrah.
-    </footer>
   </div>
 
-<script>
-const PACKAGES = [
-  {id:'soft',name:'Soft & Sweet Massage',desc:'Gentle hands, calm music — Afrah’s magic touch 💞',durations:[4,5,10,15]},
-  {id:'shoulder',name:'Shoulder Relax for Aiman',desc:'A little pressure for those tired shoulders 💪',durations:[10,15,20,25]},
-  {id:'head',name:'Head & Neck Comfort',desc:'Perfect after study stress 😌',durations:[4,6,8,12]},
-  {id:'deluxe',name:'Deluxe “Afrah Style” Massage',desc:'The full experience — Aiman’s favorite 💖',durations:[20,30,45,60]}
-];
-const CORRECT_PWD = "afrahpapa";
-const MIN_MINUTES = 4;
+  <!-- Easter Egg Popup -->
+  <div class="popup" id="popup">
+    <div class="title">Kuromi Secret 💜</div>
+    <div class="msg">“Bro sybau” — written by <b>Hajji Munna</b> 😈😈 <span class="wink">★</span></div>
+  </div>
 
-const $ = s=>document.querySelector(s);
+  <!-- SIXXX sevenn banner (visible for a few seconds) -->
+  <div class="six-banner" id="sixBanner">SIXXX sevenn</div>
+
+<script>
+/* =========================
+   Config & Elements
+   ========================= */
+const PACKAGES = [
+  {id:'soft',   name:'Soft & Sweet',           desc:'Gentle hands — Afrah magic 💜',        durations:[4,5,10,15]},
+  {id:'should', name:'Shoulder Reset',         desc:'Tired shoulders be gone 💪',            durations:[10,15,20,25]},
+  {id:'head',   name:'Head & Neck Comfort',    desc:'Study stress reliever 😌',              durations:[4,6,8,12]},
+  {id:'deluxe', name:'Deluxe “Afrah Style”',   desc:'Full pamper — Aiman’s fav 😈',         durations:[20,30,45,60]}
+];
+const MIN_MINUTES = 4;
+const CORRECT_PWD = "afrahpapa"; // fixed password
+const $ = s => document.querySelector(s);
+
 const $packages = $('#packages'), $duration=$('#duration'),
       $activePkg=$('#activePkg'), $activeDur=$('#activeDur'),
-      $display=$('#display'), $status=$('#statusLine'),
+      $display=$('#display'), $timeText=$('#timeText'), $status=$('#statusLine'),
       $start=$('#startBtn'), $cancel=$('#cancelBtn'),
       $pause=$('#pauseBtn'), $resume=$('#resumeBtn'),
-      $pwd=$('#pwd');
+      $pwd=$('#pwd'), $popup=$('#popup'), $sixBanner=$('#sixBanner'),
+      $icon=$('#kuromiIcon');
 
 let selectedPkg=null, selectedMinutes=0, remainingSec=0, timer=null, paused=false;
 
+/* =========================
+   UI Build
+   ========================= */
 function renderPackages(){
   $packages.innerHTML='';
   PACKAGES.forEach(pkg=>{
-    const div=document.createElement('div');
-    div.className='pkg';
-    div.innerHTML=`<h3>${pkg.name}</h3><div class="tiny">${pkg.desc}</div><div class="tiny">Times: ${pkg.durations.map(m=>m+'m').join(' • ')}</div>`;
-    div.onclick=()=>selectPackage(pkg);
-    $packages.appendChild(div);
+    const el=document.createElement('div');
+    el.className='pkg';
+    el.innerHTML=`<div>
+      <h3>${pkg.name}</h3>
+      <div class="tiny">${pkg.desc}</div>
+      <div class="tiny">Times: ${pkg.durations.map(m=>m+'m').join(' • ')}</div>
+    </div>
+    <button class="btn">Select</button>`;
+    el.querySelector('button').onclick=()=>selectPackage(pkg);
+    $packages.appendChild(el);
   });
   selectPackage(PACKAGES[0]);
 }
 function selectPackage(pkg){
   selectedPkg=pkg;
-  [...$packages.children].forEach(ch=>ch.classList.toggle('active', ch.querySelector('h3').textContent===pkg.name));
+  [...$packages.children].forEach(ch=>ch.classList.toggle('active',
+    ch.querySelector('h3').textContent===pkg.name));
   $duration.innerHTML='';
   pkg.durations.forEach(m=>{
     if(m>=MIN_MINUTES){
-      const o=document.createElement('option');
-      o.value=m; o.textContent=m+" minutes";
+      const o=document.createElement('option'); o.value=m; o.textContent=`${m} minutes`;
       $duration.appendChild(o);
     }
   });
-  selectedMinutes=parseInt($duration.value);
+  selectedMinutes=parseInt($duration.value,10);
   updateLabels();
 }
-$duration.onchange=()=>{selectedMinutes=parseInt($duration.value);updateLabels();};
+$duration.addEventListener('change', ()=>{
+  selectedMinutes=parseInt($duration.value,10); updateLabels();
+});
 function updateLabels(){
-  $activePkg.textContent=selectedPkg?selectedPkg.name:"No package";
-  $activeDur.textContent=selectedMinutes?selectedMinutes+" min":"0:00";
+  $activePkg.textContent = selectedPkg? selectedPkg.name : 'No package';
+  $activeDur.textContent = selectedMinutes? `${selectedMinutes} min` : '0:00';
 }
+
+/* =========================
+   Timer
+   ========================= */
 function fmt(sec){
-  const m=Math.floor(sec/60).toString().padStart(2,'0');
-  const s=Math.floor(sec%60).toString().padStart(2,'0');
+  const m=String(Math.floor(sec/60)).padStart(2,'0');
+  const s=String(Math.floor(sec%60)).padStart(2,'0');
   return `${m}:${s}`;
 }
+function uiLock(run){
+  $start.disabled=run; $cancel.disabled=!run;
+  $pause.disabled=!run || paused; $resume.disabled=!run || !paused;
+  $duration.disabled=run; $pwd.disabled=run;
+  [...document.querySelectorAll('.pkg')].forEach(e=>e.style.pointerEvents=run?'none':'auto');
+}
 function startTimer(){
-  remainingSec=selectedMinutes*60;
-  paused=false;
-  $status.textContent=`Afrah’s ${selectedPkg.name} massage for Aiman has started 💖`;
+  remainingSec=selectedMinutes*60; paused=false;
+  $timeText.textContent=fmt(remainingSec);
+  $status.textContent=`Afrah started ${selectedPkg.name} for Aiman 💜`;
   uiLock(true);
+  if(timer) clearInterval(timer);
   timer=setInterval(()=>{
-    if(paused)return;
+    if(paused) return;
     remainingSec--;
-    $display.textContent=fmt(remainingSec);
+    $timeText.textContent=fmt(remainingSec);
     if(remainingSec<=0){
-      clearInterval(timer);
-      uiLock(false);
-      $display.textContent="00:00";
-      $status.textContent="Session done! Great job Afrah 💐";
-      beep();
+      clearInterval(timer); timer=null; uiLock(false);
+      $timeText.textContent='00:00';
+      $status.textContent='Session done! Kuromi would be proud 😈';
+      playChime();
     }
   },1000);
 }
-function uiLock(run){
-  $start.disabled=run;
-  $cancel.disabled=!run;
-  $pause.disabled=!run||paused;
-  $resume.disabled=!run||!paused;
-  $duration.disabled=run;
-  $pwd.disabled=run;
-  [...document.querySelectorAll('.pkg')].forEach(e=>e.style.pointerEvents=run?'none':'auto');
-}
 function cancelTimer(){
-  if(timer)clearInterval(timer);
-  uiLock(false);
-  $display.textContent="00:00";
-  $status.textContent="Afrah stopped the session 😅";
+  if(timer) clearInterval(timer); timer=null; paused=false; uiLock(false);
+  $timeText.textContent='00:00';
+  $status.textContent='Afrah stopped the session.';
 }
-function pauseTimer(){paused=true;$status.textContent="Paused 💅";uiLock(true);}
-function resumeTimer(){paused=false;$status.textContent="Resumed 💪";uiLock(true);}
-function beep(){
+function pauseTimer(){ paused=true; $status.textContent='Paused 💅'; uiLock(true); }
+function resumeTimer(){ paused=false; $status.textContent='Resumed 💪'; uiLock(true); }
+
+/* =========================
+   Password gate
+   ========================= */
+$start.addEventListener('click', ()=>{
+  if(!selectedPkg){ alert('Pick a package first'); return; }
+  if(!selectedMinutes || selectedMinutes<MIN_MINUTES){ alert('Pick at least 4 minutes'); return; }
+  if(($pwd.value||'').trim()!==CORRECT_PWD){ alert('Wrong password! (hint: your Roblox password)'); return; }
+  startTimer();
+});
+$cancel.addEventListener('click', cancelTimer);
+$pause.addEventListener('click', pauseTimer);
+$resume.addEventListener('click', resumeTimer);
+
+/* =========================
+   Easter Eggs
+   - Tap Kuromi icon 6x
+   - OR tap timer 6x
+   ========================= */
+let iconTaps=0, timerTaps=0, iconTapWindow, timerTapWindow;
+
+function resetCounter(type){
+  if(type==='icon'){ iconTaps=0; clearTimeout(iconTapWindow); }
+  else { timerTaps=0; clearTimeout(timerTapWindow); }
+}
+function handleEasterEgg(from){
+  showPopup(); playChime();
+  // also do a tiny glow flash on timer
+  $display.style.boxShadow='0 0 60px #a26bff55, inset 0 0 40px #0008';
+  setTimeout(()=>{ $display.style.boxShadow='0 0 30px #3bffb022, inset 0 0 40px #0008'; }, 450);
+}
+function countTap(type){
+  if(type==='icon'){
+    if(!iconTapWindow) iconTapWindow=setTimeout(()=>resetCounter('icon'), 2500);
+    iconTaps++; if(iconTaps>=6){ resetCounter('icon'); handleEasterEgg('icon'); }
+  }else{
+    if(!timerTapWindow) timerTapWindow=setTimeout(()=>resetCounter('timer'), 2500);
+    timerTaps++; if(timerTaps>=6){ resetCounter('timer'); handleEasterEgg('timer'); }
+  }
+}
+
+$icon.addEventListener('click', ()=>countTap('icon'));
+$display.addEventListener('click', ()=>countTap('timer'));
+
+/* Popup show/fade */
+function showPopup(){
+  $popup.classList.add('show');
+  setTimeout(()=> $popup.classList.remove('show'), 3000); // auto-fade after ~3s
+}
+
+/* Soft sparkle chime */
+function playChime(){
   try{
-    const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator(),g=ctx.createGain();
-    o.connect(g);g.connect(ctx.destination);
-    o.type='sine';o.frequency.value=660;
-    g.gain.value=0.1;
-    o.start();o.stop(ctx.currentTime+0.6);
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const now=ctx.currentTime;
+    const notes=[880, 1174, 1568]; // soft sparkle triad-ish
+    notes.forEach((freq,i)=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.type='sine'; o.frequency.value=freq;
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.15, now+0.02+i*0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now+0.35+i*0.02);
+      o.start(now+i*0.02); o.stop(now+0.45+i*0.02);
+    });
+    setTimeout(()=>ctx.close(), 600);
   }catch{}
 }
-$start.onclick=()=>{
-  if(!selectedPkg){alert("Afrah, please pick a package!");return;}
-  if(!selectedMinutes||selectedMinutes<MIN_MINUTES){alert("Pick at least 4 minutes, Afrah!");return;}
-  if($pwd.value!==CORRECT_PWD){alert("Wrong password Afrah! (Hint: your Roblox password)");return;}
-  startTimer();
-};
-$cancel.onclick=cancelTimer;
-$pause.onclick=pauseTimer;
-$resume.onclick=resumeTimer;
 
+/* SIXXX sevenn banner: show a few seconds then fade */
+setTimeout(()=> $sixBanner.classList.add('hide'), 5200);
+
+/* Boot */
 renderPackages();
-$display.textContent="00:00";
-$status.textContent="Ready when you are, Afrah 💗";
+$timeText.textContent='00:00';
+$status.textContent='Afrah, pick a vibe and enter password (afrahpapa).';
 </script>
 </body>
 </html>
