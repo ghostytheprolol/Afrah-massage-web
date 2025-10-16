@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Massage Timer for Afrah</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#151a2e; --muted:#94a3b8; --text:#e6eaff;
+    --accent:#7c9bff; --accent2:#80ffd3; --danger:#ff6b6b; --ok:#22c55e; --round:18px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:#0f1220;color:var(--text)}
+  .wrap{max-width:800px;margin:auto;padding:18px;display:grid;gap:16px}
+  header{display:flex;align-items:center;justify-content:space-between}
+  h1{font-size:22px;margin:0}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .card{background:var(--card);border:1px solid #1f2645;border-radius:var(--round);padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+  .packages{display:grid;gap:12px}
+  .pkg{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #212954;border-radius:14px;background:#0f1530}
+  .pkg.active{outline:2px solid var(--accent);background:#101836}
+  .pkg h3{margin:0;font-size:16px}
+  .tiny{font-size:12px;color:var(--muted)}
+  .btn{padding:10px 14px;border-radius:12px;border:1px solid #23306b;background:#122055;color:var(--text);cursor:pointer}
+  .btn.primary{background:linear-gradient(180deg,#2b48b8,#233aa3);border-color:#2d44b0}
+  .btn.danger{background:#3a1020;border-color:#6f1736;color:#ffd7e1}
+  .btn.ok{background:#123d2a;border-color:#1d5b3e;color:#d6ffe7}
+  .controls{display:grid;gap:10px}
+  label{font-size:13px;color:var(--muted)}
+  input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #253062;background:#0f1635;color:var(--text)}
+  .countdown{display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;font-size:54px;padding:22px;border-radius:18px;background:#0d132b;border:1px solid #1e254a;letter-spacing:1px}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #27306a;background:#111a3a;font-size:12px;color:#c7d2fe}
+  .muted{color:var(--muted)}
+  .flex{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Massage Packages</h1>
+      <div class="sub">Choose package → pick duration (min 4 mins) → enter password → timer starts.</div>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2 style="margin:0 0 8px 0;font-size:18px;">Packages</h2>
+    <div class="packages" id="packages"></div>
+    <div class="muted" style="margin-top:8px">Timer cannot start below <span class="pill">4 min</span>.</div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin:0 0 8px 0;font-size:18px;">Session setup</h2>
+    <div class="controls">
+      <div>
+        <label for="clientName">Client (optional)</label>
+        <input id="clientName" type="text" placeholder="Name for record">
+      </div>
+      <div>
+        <label for="duration">Duration</label>
+        <select id="duration"></select>
+      </div>
+      <div>
+        <label for="pwd">Password hint:(your Roblox password :3)</label>
+        <input id="pwd" type="password" placeholder="••••••••">
+      </div>
+      <div class="flex">
+        <button class="btn primary" id="startBtn">Start session</button>
+        <button class="btn danger" id="cancelBtn" disabled>Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="flex" style="justify-content:space-between;align-items:center">
+      <div>
+        <span class="pill" id="activePkg">No package</span>
+        <span class="pill" id="activeDur">0:00</span>
+      </div>
+      <div class="flex">
+        <button class="btn" id="pauseBtn" disabled>Pause</button>
+        <button class="btn ok" id="resumeBtn" disabled>Resume</button>
+      </div>
+    </div>
+    <hr style="height:1px;border:0;background:linear-gradient(90deg,transparent,#263169,transparent);margin:8px 0">
+    <div class="countdown" id="display">00:00</div>
+    <div class="muted" id="statusLine"></div>
+  </section>
+</div>
+
+<script>
+const PACKAGES = [
+  {id:'basic',name:'Basic Relax',desc:'Light pressure; calm & unwind.',durations:[4,5,10,15]},
+  {id:'relax',name:'Deep Relax',desc:'Moderate pressure; stress release.',durations:[10,15,20,30]},
+  {id:'deep',name:'Deep Tissue',desc:'Focused knots & muscle relief.',durations:[20,30,45,60]},
+  {id:'express',name:'Express Head/Neck',desc:'Quick targeted relief.',durations:[4,6,8,12]}
+];
+const CORRECT_PWD = "afrahpapa";
+const MIN_MINUTES = 4;
+
+const $ = s=>document.querySelector(s);
+const $packages = $('#packages'), $duration=$('#duration'),
+      $activePkg=$('#activePkg'), $activeDur=$('#activeDur'),
+      $display=$('#display'), $statusLine=$('#statusLine'),
+      $startBtn=$('#startBtn'), $cancelBtn=$('#cancelBtn'),
+      $pauseBtn=$('#pauseBtn'), $resumeBtn=$('#resumeBtn'),
+      $pwd=$('#pwd'), $client=$('#clientName');
+
+let selectedPkg=null, selectedMinutes=0, remainingSec=0, timer=null, paused=false;
+
+function renderPackages(){
+  $packages.innerHTML='';
+  PACKAGES.forEach(pkg=>{
+    const div=document.createElement('div');
+    div.className='pkg';
+    div.innerHTML=`<div><h3>${pkg.name}</h3><div class="tiny">${pkg.desc}</div>
+    <div class="tiny">Times: ${pkg.durations.map(m=>m+'m').join(' • ')}</div></div>
+    <button class="btn">Select</button>`;
+    div.querySelector('button').onclick=()=>selectPackage(pkg);
+    $packages.appendChild(div);
+  });
+  selectPackage(PACKAGES[0]);
+}
+function selectPackage(pkg){
+  selectedPkg=pkg;
+  [...$packages.children].forEach(ch=>ch.classList.toggle('active', ch.querySelector('h3').textContent===pkg.name));
+  $duration.innerHTML='';
+  pkg.durations.forEach(m=>{
+    if(m>=MIN_MINUTES){
+      const o=document.createElement('option');
+      o.value=m; o.textContent=m+" minutes";
+      $duration.appendChild(o);
+    }
+  });
+  selectedMinutes=parseInt($duration.value);
+  updateDisplayInfo();
+}
+$duration.onchange=()=>{selectedMinutes=parseInt($duration.value);updateDisplayInfo();};
+function updateDisplayInfo(){
+  $activePkg.textContent=selectedPkg?selectedPkg.name:"No package";
+  $activeDur.textContent=selectedMinutes?selectedMinutes+" min":"0:00";
+}
+
+function fmt(sec){let m=Math.floor(sec/60).toString().padStart(2,'0'),s=Math.floor(sec%60).toString().padStart(2,'0');return m+':'+s;}
+
+function startTimer(){
+  remainingSec=selectedMinutes*60;
+  paused=false;
+  $display.textContent=fmt(remainingSec);
+  $statusLine.textContent=`Running ${selectedPkg.name} for ${selectedMinutes} minutes.`;
+  uiLock(true);
+  timer=setInterval(()=>{
+    if(paused)return;
+    remainingSec--;
+    $display.textContent=fmt(remainingSec);
+    if(remainingSec<=0){
+      clearInterval(timer);
+      $display.textContent='00:00';
+      uiLock(false);
+      beep();
+      $statusLine.textContent='Session complete!';
+    }
+  },1000);
+}
+function uiLock(running){
+  $startBtn.disabled=running;
+  $cancelBtn.disabled=!running;
+  $pauseBtn.disabled=!running||paused;
+  $resumeBtn.disabled=!running||!paused;
+  $duration.disabled=running;
+  $pwd.disabled=running;
+  [...document.querySelectorAll('.pkg')].forEach(e=>e.style.pointerEvents=running?'none':'auto');
+}
+function cancelTimer(){
+  if(timer)clearInterval(timer);
+  $display.textContent='00:00';
+  $statusLine.textContent='Session cancelled.';
+  uiLock(false);
+}
+function pauseTimer(){paused=true;$statusLine.textContent='Paused.';uiLock(true);}
+function resumeTimer(){paused=false;$statusLine.textContent='Resumed.';uiLock(true);}
+function beep(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value=880;g.gain.value=0.001;
+    o.start();g.gain.exponentialRampToValueAtTime(0.3,ctx.currentTime+0.05);
+    g.gain.exponentialRampToValueAtTime(0.00001,ctx.currentTime+1.0);
+    o.stop(ctx.currentTime+1.05);setTimeout(()=>ctx.close(),1200);
+  }catch{}
+}
+
+$startBtn.onclick=()=>{
+  if(!selectedPkg){alert("Select a package first.");return;}
+  if(!selectedMinutes||selectedMinutes<MIN_MINUTES){alert("Select duration ≥ 4 min.");return;}
+  if($pwd.value!==CORRECT_PWD){alert("Wrong password!");return;}
+  startTimer();
+};
+$cancelBtn.onclick=cancelTimer;
+$pauseBtn.onclick=pauseTimer;
+$resumeBtn.onclick=resumeTimer;
+
+renderPackages();
+$display.textContent='00:00';
+$statusLine.textContent='Select a package and duration, then enter the password.';
+</script>
+</body>
+</html>
